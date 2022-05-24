@@ -20,17 +20,15 @@ test('User navigates to Google Translate', async ({ page }) => {
   let initial_text = await translatePage.readSource('initialText.txt');
   await translatePage.enterSourceText(initial_text);
   let translatedText = await translatePage.copyTranslation();
-  // console.log(`initialText: `, initial_text);
-  // console.log(`translatedText: `, translatedText);
+
   expect(
     await translatePage.verifyTranslation(initial_text, translatedText)
   ).toBe(true);
 
   await translatePage.swapLanguages();
   translatedText = initial_text;
-  // console.log(`retranslatedText: `, translatedText);
   initial_text = await translatePage.getSourceText();
-  // console.log(`reInitializedText: `, initial_text);
+  
   expect(
     await translatePage.verifyTranslation(translatedText, initial_text)
   ).toBe(true);

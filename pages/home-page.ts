@@ -9,23 +9,23 @@ export class HomePage {
     this.page = page;
   }
 
-  async open() {
+  async open(): Promise<void> {
     await this.page.goto('https://translate.google.com/');
   }
 
-  async goToLoginPage() {
+  async goToLoginPage(): Promise<void> {
     await this.page.click('a[routerlink="/login"]');
   }
 
-  async readSourceFile(fileName) {
+  async readSourceFile(fileName: string): Promise<string> {
     return readFileSync(`./textFiles/${fileName}`, 'utf-8');
   }
 
-  async readDestinationFile(fileName) {
+  async readDestinationFile(fileName: string): Promise<string> {
     return readFileSync(`./textFiles/${fileName}`, 'utf-8');
   }
 
-  async selectSource(language) {
+  async selectSource(language: string): Promise<void> {
     await this.page
       .locator(
         `//div[@jsname='gnoFo']//button[@aria-label='More source languages']//div[3]`
@@ -41,14 +41,15 @@ export class HomePage {
     );
   }
 
-  async selectDestination(language) {
+  async selectDestination(language: string): Promise<void> {
+    // For some unknown reason a couple seconds wait is needed here to make the destination language select dropdown open
     await this.page.waitForTimeout(2000);
 
     await this.page
       .locator(
         `//div[@jsname='gnoFo']//button[@aria-label='More target languages']//div[3]`
       )
-      .click({ clickCount: 1 });
+      .click();
 
     const desination_language = `(//div[contains(text(),'${language}')])[2]`;
     await this.page.waitForSelector(desination_language);
@@ -59,15 +60,15 @@ export class HomePage {
     );
   }
 
-  async enterSourceText(initial_text) {
+  async enterSourceText(initial_text: string): Promise<void> {
     await this.page.fill(`textarea[aria-label='Source text']`, initial_text);
   }
 
-  async readSource(fileName) {
+  async readSource(fileName: string): Promise<string> {
     return readFileSync(`./textFiles/${fileName}`, 'utf-8');
   }
 
-  async copyTranslation(): Promise<String> {
+  async copyTranslation(): Promise<string> {
     await this.page.locator('[aria-label="Copy translation"]').click();
 
     this.page.on('dialog', async (dialog) => {
@@ -79,7 +80,10 @@ export class HomePage {
     return affirmativeText;
   }
 
-  async verifyTranslation(inputText, translatedText): Promise<boolean> {
+  async verifyTranslation(
+    inputText: string,
+    translatedText: string
+  ): Promise<boolean> {
     if (inputText === `Demokratien` && translatedText === `Democracia`) {
       return true;
     } else if (translatedText === `Demokratien` && inputText === `Democracia`) {
@@ -89,15 +93,7 @@ export class HomePage {
     }
   }
 
-  async userIsLoggedIn(): Promise<boolean> {
-    return await isVisible(this.page, 'a[routerlink="/editor"]');
-  }
-
-  async goToSettings() {
-    await this.page.click('a[routerlink="/settings"]');
-  }
-
-  async swapLanguages() {
+  async swapLanguages(): Promise<void> {
     await this.page.click(
       `//div[@jsname='gnoFo']//c-wiz[@jsrenderer='chbWbf']//div[@jscontroller='HwavCb']//div[3]`
     );
@@ -110,15 +106,15 @@ export class HomePage {
     );
   }
 
-  async clearInputFields() {
+  async clearInputFields(): Promise<void> {
     await this.page.locator('[aria-label="Clear source text"]').click();
   }
 
-  async selectVirtualKeyboard() {
+  async selectVirtualKeyboard(): Promise<void> {
     await this.page.locator('a[role="button"]').nth(2).click();
   }
 
-  async enterHi() {
+  async enterHi(): Promise<void> {
     await this.page.locator('#K16').first().click();
     await this.page.locator('#kbd button:has-text("H")').click();
     await this.page.locator('#kbd button:has-text("i")').click();
