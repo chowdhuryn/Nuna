@@ -1,15 +1,18 @@
 {
-  "name": "nuna",
+  "name": "playwright-page-object",
   "version": "1.0.0",
-  "description": "",
+  "description": "Page Object Model with playwright",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx playwright test"
   },
-  "author": "",
+  "author": "Andrii Baidachenko",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.22.0",
-    "playwright": "^1.22.0"
+    "playwright": "^1.12.3"
+  },
+  "dependencies": {
+    "clipboardy": "^3.0.0"
   }
 }
